@@ -1,37 +1,33 @@
-import { COLLECTIONS } from '@constants/collections';
-import { fireStore } from '@remote/firebase';
-import { collection, getDocs } from 'firebase/firestore';
-import { useEffect, useState } from 'react';
+import HotelList from '@components/main/HotelList';
+import ErrorBoundary from '@shared/components/ErrorBoundary';
+import { useQueryClient } from '@tanstack/react-query';
+import { useHotels } from '@components/main/hooks/useHotels';
 
 const MainPage = () => {
-  const [hotels, setHotels] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState()
-
-  useEffect(() => {
-    setIsLoading(true);
-
-    getDocs(collection(fireStore, COLLECTIONS.HOTELS))
-      .then(snapshot => {
-        const hotelsData = snapshot.docs.map(doc => {
-          return {
-            id: doc.id,
-            ...doc.data(),
+  const client = useQueryClient();
+  return (
+    <div>
+      <h2>헤더 영역</h2>
+      <ErrorBoundary
+        fallback={({ reset }) => {
+          const handleRefetch = () => {
+            client.refetchQueries({ queryKey: useHotels.getKey() });
+            reset();
           };
-        });
 
-        setHotels(hotelsData);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, []);
-
-  if (isLoading === true || hotels === null) {
-    return <h1>로딩중...</h1>;
-  }
-
-  return <div></div>;
+          return (
+            <h2>
+              호텔데이터를 불러오지 못했어요.
+              <button onClick={handleRefetch}>다시 불러오기</button>
+            </h2>
+          );
+        }}
+      >
+        <HotelList />
+      </ErrorBoundary>
+      <h2>풋터 영역</h2>
+    </div>
+  );
 };
 
 export default MainPage;
