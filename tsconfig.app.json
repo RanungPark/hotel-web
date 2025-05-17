@@ -30,7 +30,8 @@
       "@remote/*": ["src/remote/*"],
       "@constants": ["src/constants/index.ts"],
       "@constants/*": ["src/constants/*"],
-      "@models/*": ["src/models/*"]
+      "@models/*": ["src/models/*"],
+      "@atoms/*": ["src/atoms/*"]
     }
   },
   "include": ["src"]

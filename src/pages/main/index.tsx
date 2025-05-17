@@ -1,14 +1,11 @@
 import HotelList from '@components/main/HotelList';
-import ErrorBoundary from '@shared/components/ErrorBoundary';
-import { useQueryClient } from '@tanstack/react-query';
-import { useHotels } from '@components/main/hooks/useHotels';
 
 const MainPage = () => {
-  const client = useQueryClient();
+  // const client = useQueryClient();
   return (
     <div>
       <h2>헤더 영역</h2>
-      <ErrorBoundary
+      {/* <ErrorBoundary
         fallback={({ reset }) => {
           const handleRefetch = () => {
             client.refetchQueries({ queryKey: useHotels.getKey() });
@@ -23,8 +20,13 @@ const MainPage = () => {
           );
         }}
       >
-        <HotelList />
-      </ErrorBoundary>
+        <Suspense fallback={<HotelSkeleton />}>
+          <HotelList />
+        </Suspense>
+      </ErrorBoundary> */}
+
+      <HotelList />
+
       <h2>풋터 영역</h2>
     </div>
   );
